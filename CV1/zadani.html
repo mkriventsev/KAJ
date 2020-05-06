@@ -17,7 +17,7 @@
         <section class="main">
             <input class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
-            <ul class="todo-list"></ul>
+            <ul id="todo-list" class="todo-list"></ul>
             <footer class="footer">
                 <span class="todo-count"></span>
                 <div class="filters">
@@ -51,7 +51,6 @@
             filter: 'all'
         };
 
-
         /*
         Template:
         <li>
@@ -62,6 +61,23 @@
             </div>
         </li>
         */
+
+        let ulTodoList = document.getElementsByClassName('todo-list')[0];
+
+        function createTodosToUls(todos, ulTodoList) {
+            todos.forEach(todoEl => {
+                console.log(todoEl.text)
+                let completed = ''
+                if (todoEl.completed)
+                    completed = 'checked'
+                let todoElTemplate = `<li><div class="view"><input class="toggle" type="checkbox" ${completed}>
+                <label>${todoEl.text}</label><button class="destroy"></button></div></li>`
+                ulTodoList.insertAdjacentHTML('beforeend', todoElTemplate);
+            });
+        }
+
+        createTodosToUls(state.todos,ulTodoList)
+
     </script>
 
 </body>
