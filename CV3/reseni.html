@@ -53,21 +53,6 @@
         // Class containing state
         //
 
-        function test(){
-            console.log('test')
-        }
-
-        const test2 = function(){
-            console.log('test2')
-        }
-        const test3 = () => {
-            console.log(3)
-        }
-        const test4 = a => {
-            return a;
-        }
-        const test5 = a => a+1 
-
         class State {
             constructor (initialTodos, initialFilter) {
                 this._todos = initialTodos;
@@ -114,7 +99,6 @@
             targetEl.innerHTML = ''
 
             for (const todo of todos) {
-
                 // Prepare elements
                 const inputEl = document.createElement('input');
                 inputEl.classList.add('toggle');
@@ -122,7 +106,7 @@
                 inputEl.checked = todo.completed;
 
                 const labelEl = document.createElement('label');
-                labelEl.innerHTML = todo.text;
+                labelEl.textContent = todo.text;
 
                 const buttonEl = document.createElement('button');
                 buttonEl.classList.add('destroy');
@@ -142,12 +126,13 @@
             targetEl.innerHTML = '';
 
             const todosHtmlArray = todos.map((todo) => {
-                const html =
-                    '<li>' +
-                    '  <input class="toggle" type="checkbox" ' + (todo.completed ? 'checked' : '')  + '>' +
-                    '  <label>' + todo.text + '</label>' +
-                    '  <button class="destroy"></button>' +
-                    '</li>';
+                const html = `
+                    <li>
+                      <input class="toggle" type="checkbox" ${ todo.completed ? 'checked' : '' }>
+                      <label>${ todo.text }</label>
+                      <button class="destroy"></button>
+                    </li>
+                `;
 
                 return html;
             })
@@ -169,7 +154,7 @@
         //
 
         const inputEl = document.querySelector('.new-todo');
-        inputEl.addEventListener('keyup', (event)=> {
+        inputEl.addEventListener('keyup', (event) => {
             if (event.key !== "Enter") {
                 return;
             }
@@ -190,9 +175,16 @@
         // Prototype expansion
         //
 
+        // Add method on Object prototype. This method will modify the object
+        // and add current timestamp to it. All created objects inherit from
+        // Object prototype and will have this method.
         Object.prototype.addTimestamp = function () {
             this.timestamp = Date.now();
         }
+        // You should generally avoid modifying prototypes of basic JavaScript
+        // objects, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+        // But it can be sometimes useful, for example, if we want to polyfill
+        // some language feature to older browsers.
 
         //
         // Handle filters
@@ -203,29 +195,23 @@
             active: document.querySelector('#filter-active'),
             completed: document.querySelector('#filter-completed')
         };
-    
-        // for (const objTuple of Object.entries(filters)) {
-            // const filterName = objTuple[0]
-            // const filterEl = objTuple[1]
-            
-        for (const [filterName,filterEl] of Object.entries(filters)) {
-            filterEl.addEventListener('click', e => {
+
+        for (const [filterName, filterEl] of Object.entries(filters)) {
+            filterEl.addEventListener('click', () => {
                 filtersClick(filterName);
             });
         }
 
         function filtersClick (newFilterType) {
+            // Another approach to rendering the view, manually update html
+            // nodes that need to be updated instead of rerendering the whole
+            // part of the UI, as we did in createHtmlWithStrings or in
+            // createHtmlWithCreateElement functions.
+
             // Remove 'selected' class on all filter buttons
-            for (const filter of Object.values(filters)){
+            for (const [filterName, filterEl] of Object.entries(filters)) {
                 filterEl.classList.remove('selected');
             }
-
-            // for (var key in filters) {
-            //     if (filters.hasOwnProperty(key)) {
-            //         const filter = filters[key];
-            //         filter.classList.remove('selected');
-            //     }
-            // }
 
             // Add 'selected' class to clicked filter button
             filters[newFilterType].classList.add('selected');
@@ -236,6 +222,11 @@
             // Render todos view
             createHtmlWithCreateElement(state.getTodos(), todoListEl);
         }
+
+        // EXCERCISES: Finish remaining features
+        //      1. Remove todo button
+        //      2. Checking/Unchecking of todo
+        //      3. Clear completed button
 
     </script>
 

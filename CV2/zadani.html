@@ -42,7 +42,7 @@
         // Predefined state
         //
 
-        var state = {
+        var loadState = {
             todos: [
                 { text: 'Hi', completed: true },
                 { text: 'Hello', completed: false },
@@ -53,19 +53,23 @@
 
         //Parametry konstuktoru: initialTodos, initialFilter
         // Vlastnosti: this._todos, this._filter
+
         var State = function (initialTodos, initialFilters) {
             this._todos = initialTodos;
             this._filter = initialFilters;
         }
+        // Metody: addTodo, setFilter, getTodos
 
-        //Metody: addTodo, setFilter, getTodos
-        State.prototype.addTodo = function (todo) {
-            this._todos = todo;
+        State.prototype.addTodo = function (newTodo) {
+            this._todos.push(newTodo);
         }
-        State.prototype.setFilter = function (filter) {
-            this._todos = filter;
+
+        State.prototype.setFilter = function (applyFilter) {
+            this._filter = applyFilter;
         }
+
         State.prototype.getTodos = function () {
+
             return this._todos.filter(function (todo) {
                 if (this._filter == "all") {
                     return true;
@@ -74,8 +78,10 @@
                 } else if (this._filter == "active") {
                     return todo.completed == false;
                 }
-            }
+            }.bind(this))
         }
+
+        var state = new State(loadState.todos, loadState.filter);
 
 
         //
@@ -92,65 +98,86 @@
         */
 
 
-
         function createHtmlWithStrings(todos, targetEl) {
-                    targetEl.innerHTML = ''
+            targetEl.innerHTML = ''
 
-                    for (var i = 0; i < todos.length; i++) {
-                        var todo = todos[i];
+            for (var i = 0; i < todos.length; i++) {
+                var todo = todos[i];
+                // debugger
+                var html =
+                    '<li>' +
+                    '  <input class="toggle" type="checkbox" ' + (todo.completed ? 'checked' : '') + '>' +
+                    '  <label>' + todo.text + '</label>' +
+                    '  <button class="destroy"></button>' +
+                    '</li>';
 
-                        var html =
-                            '<li>' +
-                            '  <input class="toggle" type="checkbox" ' + (todo.completed ? 'checked' : '') + '>' +
-                            '  <label>' + todo.text + '</label>' +
-                            '  <button class="destroy"></button>' +
-                            '</li>';
-
-                        targetEl.insertAdjacentHTML('beforeend', html);
-                    }
-                }
+                targetEl.insertAdjacentHTML('beforeend', html);
+            }
+        }
 
         //
         // Append todos html into the page
         //
 
         var todoListEl = document.querySelector('.todo-list')
-            createHtmlWithStrings(state.todos, todoListEl);
 
-            //
-            // Handle main input
-            //
+        createHtmlWithStrings(loadState.todos, todoListEl);
 
-            // TODO
+        //
+        // Handle main input
+        //
 
-            //
-            // Prototype expansion
-            //
+        var inputMain = document.querySelector('input.new-todo');
 
-            // Add method on Object prototype. This method will modify the object
-            // and add current timestamp to it. All created objects inherit from
-            // Object prototype and will have this method.
-            Object.prototype.addTimestamp = function () {
-                this.timestamp = Date.now();
+        // debugger
+        inputMain.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                console.log(event)
+                var inputContent = inputMain.value;
+                console.log(inputContent)
+                state.addTodo({ text: inputContent, completed: false });
+                console.log(state._todos[state._todos.length - 1])
+                inputMain.value = '';
+                createHtmlWithStrings(state._todos, todoListEl);
             }
-            // You should generally avoid modifying prototypes of basic JavaScript
-            // objects, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
-            // But it can be sometimes useful, for example, if we want to polyfill
-            // some language feature to older browsers.
+        })
 
-            //
-            // Handle filters
-            //
+        //
+        // Prototype expansion
+        //
 
-            var filters = {
-                all: document.querySelector('#filter-all'),
-                active: document.querySelector('#filter-active'),
-                completed: document.querySelector('#filter-completed')
-            };
+        // Add method on Object prototype. This method will modify the object
+        // and add current timestamp to it. All created objects inherit from
+        // Object prototype and will have this method.
+        Object.prototype.addTimestamp = function () {
+            this.timestamp = Date.now();
+        }
+        // You should generally avoid modifying prototypes of basic JavaScript
+        // objects, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+        // But it can be sometimes useful, for example, if we want to polyfill
+        // some language feature to older browsers.
 
-            for (var filterName in filters) {
-                // TODO
+        //
+        // Handle filters
+        //
+
+        var filters = {
+            all: document.querySelector('#filter-all'),
+            active: document.querySelector('#filter-active'),
+            completed: document.querySelector('#filter-completed')
+        };
+
+        for (let filterName in filters) {
+            console.log(filterName, 'l')
+            if (filters.hasOwnProperty(filterName)) {
+                filters[filterName].addEventListener('click',  () => {
+                    state.setFilter(filterName)
+                    console.log(state)
+                    console.log(filterName)
+                    createHtmlWithStrings(                    state.getTodos(), todoListEl)
+                })
             }
+        }
 
     </script>
 

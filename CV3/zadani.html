@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="http://todomvc.com/examples/vanilla-es6/node_modules/todomvc-common/base.css">
     <link rel="stylesheet" href="http://todomvc.com/examples/vanilla-es6/node_modules/todomvc-app-css/index.css">
     <title>Lecture 03</title>
 </head>
+
 <body>
     <section class="todoapp">
         <header class="header">
@@ -40,9 +42,9 @@
         // Predefined state
         //
 
-        const initialState = {
+        let initialState = {
             todos: [
-                { text: 'Hi', completed: true  },
+                { text: 'Hi', completed: true },
                 { text: 'Hello', completed: false },
                 { text: 'Hi there!', completed: true },
             ],
@@ -53,22 +55,21 @@
         // Class containing state
         //
 
+        //Upravte: State zkuste přepsat pomocí Class
         class State {
-            constructor (initialTodos, initialFilter) {
+            constructor(initialTodos, initialFilter) {
                 this._todos = initialTodos;
                 this._filter = initialFilter;
             }
-
-            addTodo (todo) {
+            addTodo(todo) {
                 this._todos.push(todo);
             }
-
-            setFilter (filter) {
+            setFilter(filter) {
                 this._filter = filter;
             }
-
-            getTodos () {
-                return this._todos.filter((todo) => {
+            //Upravte: State.getTodos filter a bind, přepište na arrow funkci
+            getTodos() {
+                return this._todos.filter(todo => {
                     if (this._filter === 'all') {
                         return true;
                     } else if (this._filter === 'completed') {
@@ -78,7 +79,34 @@
                     }
                 });
             }
-        }
+
+
+        };
+
+        // var State = function (initialTodos, initialFilter) {
+        //     this._todos = initialTodos;
+        //     this._filter = initialFilter;
+        // }
+
+        // State.prototype.addTodo = function (todo) {
+        //     this._todos.push(todo);
+        // }
+
+        // State.prototype.setFilter = function (filter) {
+        //     this._filter = filter;
+        // }
+
+        // State.prototype.getTodos = function () {
+        //     return this._todos.filter(function (todo) {
+        //         if (this._filter === 'all') {
+        //             return true;
+        //         } else if (this._filter === 'completed') {
+        //             return todo.completed === true;
+        //         } else if (this._filter === 'active') {
+        //             return todo.completed === false;
+        //         }
+        //     }.bind(this));
+        // }
 
         const state = new State(initialState.todos, initialState.filter);
 
@@ -95,18 +123,17 @@
             </li>
         */
 
-        function createHtmlWithCreateElement (todos, targetEl) {
+        //Upravte: createHtmlWithCreateElement cyklus zkuste přepsat na for - of
+        function createHtmlWithCreateElement(todos, targetEl) {
             targetEl.innerHTML = ''
-
             for (const todo of todos) {
-                // Prepare elements
                 const inputEl = document.createElement('input');
                 inputEl.classList.add('toggle');
                 inputEl.type = 'checkbox';
                 inputEl.checked = todo.completed;
 
                 const labelEl = document.createElement('label');
-                labelEl.textContent = todo.text;
+                labelEl.innerHTML = todo.text;
 
                 const buttonEl = document.createElement('button');
                 buttonEl.classList.add('destroy');
@@ -122,17 +149,18 @@
             }
         }
 
-        function createHtmlWithStrings (todos, targetEl) {
+        //Upravte: createHtmlWithStrings přepište na template literal
+
+        function createHtmlWithStrings(todos, targetEl) {
             targetEl.innerHTML = '';
 
-            const todosHtmlArray = todos.map((todo) => {
-                const html = `
-                    <li>
-                      <input class="toggle" type="checkbox" ${ todo.completed ? 'checked' : '' }>
-                      <label>${ todo.text }</label>
+            const todosHtmlArray = todos.map(function (todo) {
+                const html =
+                    `<li>
+                      <input class="toggle" type="checkbox" ${todo.completed ? 'checked' : ''}>
+                      <label>${todo.text}</label>
                       <button class="destroy"></button>
-                    </li>
-                `;
+                    </li>`;
 
                 return html;
             })
@@ -154,7 +182,7 @@
         //
 
         const inputEl = document.querySelector('.new-todo');
-        inputEl.addEventListener('keyup', (event) => {
+        inputEl.addEventListener('keyup', function (event) {
             if (event.key !== "Enter") {
                 return;
             }
@@ -175,16 +203,9 @@
         // Prototype expansion
         //
 
-        // Add method on Object prototype. This method will modify the object
-        // and add current timestamp to it. All created objects inherit from
-        // Object prototype and will have this method.
         Object.prototype.addTimestamp = function () {
             this.timestamp = Date.now();
         }
-        // You should generally avoid modifying prototypes of basic JavaScript
-        // objects, see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
-        // But it can be sometimes useful, for example, if we want to polyfill
-        // some language feature to older browsers.
 
         //
         // Handle filters
@@ -196,21 +217,24 @@
             completed: document.querySelector('#filter-completed')
         };
 
-        for (const [filterName, filterEl] of Object.entries(filters)) {
-            filterEl.addEventListener('click', () => {
-                filtersClick(filterName);
-            });
+
+        // Upravte: IIFE v navěšování posluchačů nahraďte za const/let
+        for (let filterName in filters) {
+            if (filters.hasOwnProperty(filterName)) {
+                const filterEl = filters[filterName];
+                filterEl.addEventListener('click', function (e) {
+                    filtersClick(filterName);
+                });
+            }
         }
 
-        function filtersClick (newFilterType) {
-            // Another approach to rendering the view, manually update html
-            // nodes that need to be updated instead of rerendering the whole
-            // part of the UI, as we did in createHtmlWithStrings or in
-            // createHtmlWithCreateElement functions.
-
+        function filtersClick(newFilterType) {
             // Remove 'selected' class on all filter buttons
-            for (const [filterName, filterEl] of Object.entries(filters)) {
-                filterEl.classList.remove('selected');
+            for (let key in filters) {
+                if (filters.hasOwnProperty(key)) {
+                    const filter = filters[key];
+                    filter.classList.remove('selected');
+                }
             }
 
             // Add 'selected' class to clicked filter button
@@ -223,12 +247,8 @@
             createHtmlWithCreateElement(state.getTodos(), todoListEl);
         }
 
-        // EXCERCISES: Finish remaining features
-        //      1. Remove todo button
-        //      2. Checking/Unchecking of todo
-        //      3. Clear completed button
-
     </script>
 
 </body>
+
 </html>
