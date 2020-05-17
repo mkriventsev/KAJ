@@ -51,10 +51,6 @@
             filter: 'all'
         };
 
-        //
-        // Class containing state
-        //
-
         //Upravte: State zkuste přepsat pomocí Class
         class State {
             constructor(initialTodos, initialFilter) {
@@ -80,6 +76,7 @@
                 });
             }
 
+            //DONE      3. Clear completed button
             getNotDone() {
                 return this._todos.filter(todo => {
                     if (todo.completed === false) {
@@ -118,19 +115,6 @@
 
         const state = new State(initialState.todos, initialState.filter);
 
-        //
-        // Prepare todos html
-        //
-
-        /*
-            Template example:
-            <li>
-                <input class="toggle" type="checkbox" checked>
-                <label>aaa</label>
-                <button class="destroy"></button>
-            </li>
-        */
-
         //Upravte: createHtmlWithCreateElement cyklus zkuste přepsat na for - of
         function createHtmlWithCreateElement(todos, targetEl) {
             targetEl.innerHTML = ''
@@ -141,7 +125,7 @@
                     inputEl.type = 'checkbox';
                     const todo = todos[index]
                     inputEl.checked = todo.completed;
-                    
+
                     //DONE      1. Remove todo button
                     inputEl.addEventListener('click', (e) => {
                         todo.completed = !(todo.completed)
@@ -153,7 +137,7 @@
 
                     const buttonEl = document.createElement('button');
                     buttonEl.classList.add('destroy');
-                    
+
                     //DONE      2. Checking/Unchecking of todo
                     buttonEl.addEventListener('click', (e) => {
                         const removed = todos.splice(index, 1)
@@ -172,10 +156,6 @@
                     targetEl.appendChild(todoEl);
                 }
             }
-        }
-
-        function deleteTodo(todo) {
-            todos.delete(todo)
         }
 
         //Upravte: createHtmlWithStrings přepište na template literal
@@ -206,39 +186,25 @@
         createHtmlWithCreateElement(state.getTodos(), todoListEl);
         // createHtmlWithStrings(state.getTodos(), todoListEl);
 
-        //
-        // Handle main input
-        //
-
         const inputEl = document.querySelector('.new-todo');
         inputEl.addEventListener('keyup', function (event) {
             if (event.key !== "Enter") {
                 return;
             }
 
-            // Update app state
             const todo = {
                 text: inputEl.value,
                 completed: false
             };
             state.addTodo(todo);
 
-            // Update html
             inputEl.value = '';
             createHtmlWithCreateElement(state.getTodos(), todoListEl);
         })
 
-        //
-        // Prototype expansion
-        //
-
         Object.prototype.addTimestamp = function () {
             this.timestamp = Date.now();
         }
-
-        //
-        // Handle filters
-        //
 
         const filters = {
             all: document.querySelector('#filter-all'),
@@ -281,19 +247,14 @@
         clearCompleted.addEventListener('click', function (e) {
             state._todos = state.getNotDone();
             createHtmlWithCreateElement(state.getTodos(), todoListEl);
-            // state._todos.filter(todo => {
-            //     if (!todo.completed) {
-            //         console.log(todo)
-            //         return true
-            //     }
-            })
+
+        })
+
 
         // EXCERCISES: Finish remaining features
         //DONE      1. Remove todo button
         //DONE      2. Checking/Unchecking of todo
         //DONE      3. Clear completed button
-
-
 
 
     </script>
