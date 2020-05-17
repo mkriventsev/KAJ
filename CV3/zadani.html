@@ -80,6 +80,14 @@
                 });
             }
 
+            getNotDone() {
+                return this._todos.filter(todo => {
+                    if (todo.completed === false) {
+                        return true;
+                    }
+                })
+            };
+
 
         };
 
@@ -126,27 +134,48 @@
         //Upravte: createHtmlWithCreateElement cyklus zkuste přepsat na for - of
         function createHtmlWithCreateElement(todos, targetEl) {
             targetEl.innerHTML = ''
-            for (const todo of todos) {
-                const inputEl = document.createElement('input');
-                inputEl.classList.add('toggle');
-                inputEl.type = 'checkbox';
-                inputEl.checked = todo.completed;
+            for (let index in todos) {
+                if (todos.hasOwnProperty(index)) {
+                    const inputEl = document.createElement('input');
+                    inputEl.classList.add('toggle');
+                    inputEl.type = 'checkbox';
+                    const todo = todos[index]
+                    inputEl.checked = todo.completed;
+                    
+                    //DONE      1. Remove todo button
+                    inputEl.addEventListener('click', (e) => {
+                        todo.completed = !(todo.completed)
+                        createHtmlWithCreateElement(todos, targetEl)
+                    })
 
-                const labelEl = document.createElement('label');
-                labelEl.innerHTML = todo.text;
+                    const labelEl = document.createElement('label');
+                    labelEl.innerHTML = todo.text;
 
-                const buttonEl = document.createElement('button');
-                buttonEl.classList.add('destroy');
+                    const buttonEl = document.createElement('button');
+                    buttonEl.classList.add('destroy');
+                    
+                    //DONE      2. Checking/Unchecking of todo
+                    buttonEl.addEventListener('click', (e) => {
+                        const removed = todos.splice(index, 1)
+                        createHtmlWithCreateElement(todos, targetEl)
+                    }
+                    )
+                    console.log('test')
 
-                // Append these elements to the todo wrapper element
-                const todoEl = document.createElement('li');
-                todoEl.appendChild(inputEl);
-                todoEl.appendChild(labelEl);
-                todoEl.appendChild(buttonEl);
+                    // Append these elements to the todo wrapper element
+                    const todoEl = document.createElement('li');
+                    todoEl.appendChild(inputEl);
+                    todoEl.appendChild(labelEl);
+                    todoEl.appendChild(buttonEl);
 
-                // Append todo to the page
-                targetEl.appendChild(todoEl);
+                    // Append todo to the page
+                    targetEl.appendChild(todoEl);
+                }
             }
+        }
+
+        function deleteTodo(todo) {
+            todos.delete(todo)
         }
 
         //Upravte: createHtmlWithStrings přepište na template literal
@@ -174,8 +203,8 @@
         //
 
         const todoListEl = document.querySelector('.todo-list')
-        // createHtmlWithCreateElement(state.getTodos(), todoListEl);
-        createHtmlWithStrings(state.getTodos(), todoListEl);
+        createHtmlWithCreateElement(state.getTodos(), todoListEl);
+        // createHtmlWithStrings(state.getTodos(), todoListEl);
 
         //
         // Handle main input
@@ -196,7 +225,7 @@
 
             // Update html
             inputEl.value = '';
-            createHtmlWithStrings(state.getTodos(), todoListEl);
+            createHtmlWithCreateElement(state.getTodos(), todoListEl);
         })
 
         //
@@ -246,13 +275,26 @@
             // Render todos view
             createHtmlWithCreateElement(state.getTodos(), todoListEl);
         }
+
+        //DONE      3. Clear completed button
+        const clearCompleted = document.querySelector('.clear-completed');
+        clearCompleted.addEventListener('click', function (e) {
+            state._todos = state.getNotDone();
+            createHtmlWithCreateElement(state.getTodos(), todoListEl);
+            // state._todos.filter(todo => {
+            //     if (!todo.completed) {
+            //         console.log(todo)
+            //         return true
+            //     }
+            })
+
         // EXCERCISES: Finish remaining features
-        //      1. Remove todo button
-        //      2. Checking/Unchecking of todo
-        //      3. Clear completed button
+        //DONE      1. Remove todo button
+        //DONE      2. Checking/Unchecking of todo
+        //DONE      3. Clear completed button
 
 
-        function removeTodos()
+
 
     </script>
 
