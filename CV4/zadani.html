@@ -92,7 +92,15 @@
                 this.circleElement.style.top = `${this.y}px`
                 this.circleElement.style.left = `${this.x}px`
             };
+            
+            handleEvent = function(e) {
+                console.log(this);
+                console.log(e);
+                if (e.type == 'keydown'){
+                    this._keydown(e);
+                };
 
+            }
 
         }
         // var M = function (x, y) {
@@ -114,14 +122,14 @@
         }
 
         // handleEvent function look at constructor
-        M.prototype.handleEvent = function (e) {
-        }
+        // M.prototype.handleEvent = function (e) {
+        // }
 
         // let circleElement = document.querySelector('div')
         // let circleElementCoords = circleElement.getBoundingClientRect()
         // console.log(circleElement)
         var m = new M(100, 100);
-        window.addEventListener('keydown', m._keydown)
+        window.addEventListener('keydown', m)
 
     </script>
 </body>
