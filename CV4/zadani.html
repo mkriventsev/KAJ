@@ -94,14 +94,15 @@
             };
 
             handleEvent = function (e) {
-                console.log(this);
-                console.log(e);
+
+                // console.log(e);
                 switch (e.type) {
                     case 'keydown':
                         this._keydown(e);
                         break;
-                    case 'mouseover':
-
+                    case 'mousemove':
+                    // console.log(this);
+                        console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
                         break;
                 }
 
