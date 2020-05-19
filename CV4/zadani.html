@@ -1,76 +1,129 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Lecture 04 - Keyboard</title>
-        <style>
-            body, html { height:100%; font-family: Arial; }
-            div {
-                background: red; width:200px; height:200px; position:absolute; top:20px; left:40px;
-                border-radius: 50%;
-                box-sizing: border-box;
-                text-align: center;
-                padding-top:80px;
-                font-size: 20px;
-                font-weight: bold;
-            }
 
-            div a {
-                color: white;
-                text-decoration: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div><a href="http://www.seznam.cz">SEZNAM</a></div>
-        <script>
-            // create M class via prototype or ES6 class
-            // constructor params x,y - initial position of red circle on page
+<head>
+    <meta charset="utf-8">
+    <title>Lecture 04 - Keyboard</title>
+    <style>
+        body,
+        html {
+            height: 100%;
+            font-family: Arial;
+        }
 
-            // 1. write code for moving circle on page via keyboard keys up, down, etc...
+        div {
+            background: red;
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            border-radius: 50%;
+            box-sizing: border-box;
+            text-align: center;
+            padding-top: 80px;
+            font-size: 20px;
+            font-weight: bold;
+        }
 
-            // 2. use handleEvent
+        div a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
 
-            // 3. log mouse position to console
+<body>
+    <div><a href="http://www.seznam.cz">SEZNAM</a></div>
+    <script>
+        // create M class via prototype or ES6 class
+        // constructor params x,y - initial position of red circle on page
 
-            // 4. show confirm before using link's href
+        //DONE 1. write code for moving circle on page via keyboard keys up, down, etc...
 
-            // 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
+        // 2. use handleEvent
 
-            // 6. try create some Promise resolved, rejected
+        // 3. log mouse position to console
 
-            // 7. try async and await
+        // 4. show confirm before using link's href
 
-            var M = function (x,y) {
+        // 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
 
-            }
+        // 6. try create some Promise resolved, rejected
 
-            M.prototype._keydown = function (e) {
+        // 7. try async and await
 
-            }
 
-            // move circle
-            M.prototype._move = function (dir, mv) {
+        const mv = 10
 
-            }
+        class M {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y
+                this.circleElement = document.querySelector('div')
+                this.circleElement.style.top = `${this.y}px`
+                this.circleElement.style.left = `${this.x}px`
+            };
 
-            // log mouse position
-            M.prototype._logPosition = function (e) {
+            _keydown = (e) => {
+                const arrows = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]
+                if (arrows.includes(e.key)) {
+                    console.log(e.key);
+                    console.log(this.circleElement.getBoundingClientRect());
+                    this._move(e.key, mv);
+                }
+            };
 
-            }
+            _move(dir, mv) {
+                switch (dir) {
+                    case 'ArrowRight':
+                        this.x += mv;
+                        break;
+                    case 'ArrowLeft':
+                        this.x -= mv;
+                        break;
+                    case 'ArrowDown':
+                        this.y += mv;
+                        break;
+                    case 'ArrowUp':
+                        this.y -= mv;
+                        break;
+                }
+                this.circleElement.style.top = `${this.y}px`
+                this.circleElement.style.left = `${this.x}px`
+            };
 
-            // showConfirm for links
-            M.prototype._showConfirm = function (e) {
 
-            }
+        }
+        // var M = function (x, y) {
+        // }
+        // M.prototype._keydown = function (e) {
+        // }
+        // move circle
+        // M.prototype._move = function (dir, mv) {
+        // }
 
-            // handleEvent function look at constructor
-            M.prototype.handleEvent = function (e) {
+        // log mouse position
+        M.prototype._logPosition = function (e) {
 
-            }
+        }
 
-            var m = new M(100,100);
+        // showConfirm for links
+        M.prototype._showConfirm = function (e) {
 
-        </script>
-    </body>
+        }
+
+        // handleEvent function look at constructor
+        M.prototype.handleEvent = function (e) {
+        }
+
+        // let circleElement = document.querySelector('div')
+        // let circleElementCoords = circleElement.getBoundingClientRect()
+        // console.log(circleElement)
+        var m = new M(100, 100);
+        window.addEventListener('keydown', m._keydown)
+
+    </script>
+</body>
+
 </html>
