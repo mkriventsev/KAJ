@@ -92,13 +92,18 @@
                 this.circleElement.style.top = `${this.y}px`
                 this.circleElement.style.left = `${this.x}px`
             };
-            
-            handleEvent = function(e) {
+
+            handleEvent = function (e) {
                 console.log(this);
                 console.log(e);
-                if (e.type == 'keydown'){
-                    this._keydown(e);
-                };
+                switch (e.type) {
+                    case 'keydown':
+                        this._keydown(e);
+                        break;
+                    case 'mouseover':
+
+                        break;
+                }
 
             }
 
@@ -130,6 +135,7 @@
         // console.log(circleElement)
         var m = new M(100, 100);
         window.addEventListener('keydown', m)
+        window.addEventListener('mousemove', m)
 
     </script>
 </body>
