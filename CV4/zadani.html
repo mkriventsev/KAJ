@@ -187,13 +187,14 @@
             // console.log(document.location.hrefs);
             try {
                 let htmlPageAwait = await fetch(document.location.href);
-                console.log(htmlPageAwait.text());
+                let htmlPageText = await htmlPageAwait.text();
             }
             catch (e) {
                 console.error(e);
             }
         }
-        getHtmlPageAsyncAwait();
+
+        getHtmlPageAsyncAwait().then(text => {console.log(text)});
 
     </script>
 </body>
