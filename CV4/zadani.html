@@ -55,8 +55,9 @@
 
 
         const mv = 10
-
         class M {
+            waitingTimeout = false
+
             constructor(x, y) {
                 this.x = x;
                 this.y = y
@@ -68,7 +69,6 @@
             _keydown(e) {
                 const arrows = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]
                 if (arrows.includes(e.key)) {
-                    // console.log(e.key);
                     console.log(this.circleElement.getBoundingClientRect());
                     this._move(e.key, mv);
                 }
@@ -96,12 +96,16 @@
             _logPosition(e) {
                 // console.log(e)
                 console.log(e.target.tagName);
-                if (e.target.tagName !== 'BODY'){
+                if (e.target.tagName !== 'BODY') {
                     e.stopPropagation();
-                } else {
-                    console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
+                } else if (!this.waitingTimeout) {
+                    console.log(this.waitingTimeout);
+                    this.waitingTimeout = true;
+                    setTimeout(() => {
+                        console.log(`mouse X ${e.clientX}; Y ${e.clientY}`)
+                        this.waitingTimeout = false;
+                    }, 500)
                 }
-                
             }
             _showConfirm(e) {
                 // debugger
@@ -152,7 +156,6 @@
         window.addEventListener('mousemove', m)
         m.circleElement.addEventListener('mousemove', m)
         m.circleElement.querySelector('a').addEventListener('click', m)
-        // m.cir.addEventListener('mousemove', m)
 
     </script>
 </body>
