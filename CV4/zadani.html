@@ -49,9 +49,9 @@
 
         //DONE 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
 
-        // 6. try create some Promise resolved, rejected
+        //DONE 6. try create some Promise resolved, rejected
 
-        // 7. try async and await
+        //DONE 7. try async and await
 
 
         const mv = 10
@@ -94,19 +94,30 @@
             };
 
             _logPosition(e) {
-                // console.log(e)
-                console.log(e.target.tagName);
-                if (e.target.tagName !== 'BODY') {
-                    e.stopPropagation();
-                } else if (!this.waitingTimeout) {
-                    console.log(this.waitingTimeout);
-                    this.waitingTimeout = true;
-                    setTimeout(() => {
-                        console.log(`mouse X ${e.clientX}; Y ${e.clientY}`)
+                let positionPromise = new Promise((resolve, reject) => {
+                    if (e.target.tagName !== 'BODY') {
+                        e.stopPropagation();
+                        reject('mouse over circle')
+                    } else if (!this.waitingTimeout) {
+                        this.waitingTimeout = true;
+                        console.log(e.target.tagName);
+                        setTimeout(() => {
+                            resolve(`mouse X ${e.clientX}; Y ${e.clientY}`);
+                            // debugger
+                        }, 500)
+                    }
+                });
+
+                positionPromise.then(
+                    result => {
+                        console.log(this);
+                        console.log(result)
                         this.waitingTimeout = false;
-                    }, 500)
-                }
+                    },
+                    error => { console.error(error) });
+
             }
+
             _showConfirm(e) {
                 // debugger
                 if (!confirm("Go to the link?")) {
@@ -131,6 +142,8 @@
             }
 
         }
+
+
         // var M = function (x, y) {
         // }
         // M.prototype._keydown = function (e) {
@@ -151,11 +164,37 @@
         // }
 
 
-        var m = new M(100, 100);
+        let m = new M(100, 100);
         window.addEventListener('keydown', m)
         window.addEventListener('mousemove', m)
         m.circleElement.addEventListener('mousemove', m)
         m.circleElement.querySelector('a').addEventListener('click', m)
+
+        // Úkol: napište stahovač html aktuální stránky pomocí Promise
+        let htmlPagePromise = new Promise((resolve, reject) => {
+            console.log(`current page is ${document.location.href} . Trying to get html of it:`);
+            resolve(document.documentElement.innerHTML)
+        });
+
+        htmlPagePromise.then(
+            result => {
+                console.log(result);
+            }, () => { console.log('error'); });
+
+
+        // Úkol: napište stahovač html aktuální stránky pomocí async/await
+
+        const getHtmlPageAsyncAwait = async function () {
+            // console.log(document.location.hrefs);
+            try {
+                let htmlPageAwait = await fetch(document.location.href);
+                console.log(htmlPageAwait.text());
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
+        getHtmlPageAsyncAwait();
 
     </script>
 </body>
