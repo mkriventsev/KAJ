@@ -47,7 +47,7 @@
 
         //DONE 4. show confirm before using link's href
 
-        // 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
+        //DONE 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
 
         // 6. try create some Promise resolved, rejected
 
@@ -68,7 +68,7 @@
             _keydown(e) {
                 const arrows = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]
                 if (arrows.includes(e.key)) {
-                    console.log(e.key);
+                    // console.log(e.key);
                     console.log(this.circleElement.getBoundingClientRect());
                     this._move(e.key, mv);
                 }
@@ -92,8 +92,16 @@
                 this.circleElement.style.top = `${this.y}px`
                 this.circleElement.style.left = `${this.x}px`
             };
+
             _logPosition(e) {
-                console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
+                // console.log(e)
+                console.log(e.target.tagName);
+                if (e.target.tagName !== 'BODY'){
+                    e.stopPropagation();
+                } else {
+                    console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
+                }
+                
             }
             _showConfirm(e) {
                 // debugger
@@ -142,6 +150,7 @@
         var m = new M(100, 100);
         window.addEventListener('keydown', m)
         window.addEventListener('mousemove', m)
+        m.circleElement.addEventListener('mousemove', m)
         m.circleElement.querySelector('a').addEventListener('click', m)
         // m.cir.addEventListener('mousemove', m)
 
