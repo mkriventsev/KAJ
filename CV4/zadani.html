@@ -69,7 +69,7 @@
             _keydown(e) {
                 const arrows = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]
                 if (arrows.includes(e.key)) {
-                    console.log(this.circleElement.getBoundingClientRect());
+                    // console.log(this.circleElement.getBoundingClientRect());
                     this._move(e.key, mv);
                 }
             };
@@ -110,7 +110,6 @@
 
                 positionPromise.then(
                     result => {
-                        console.log(this);
                         console.log(result)
                         this.waitingTimeout = false;
                     },
