@@ -188,9 +188,10 @@
             try {
                 let htmlPageAwait = await fetch(document.location.href);
                 let htmlPageText = await htmlPageAwait.text();
+                return htmlPageText
             }
             catch (e) {
-                console.error(e);
+                console.error(e.message);
             }
         }
 
