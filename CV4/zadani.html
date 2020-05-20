@@ -45,7 +45,7 @@
 
         //DONE 3. log mouse position to console
 
-        // 4. show confirm before using link's href
+        //DONE 4. show confirm before using link's href
 
         // 5. stopPropagating on circle to avoid logging mouseposition, also investigate useCapture option
 
@@ -65,7 +65,7 @@
                 this.circleElement.style.left = `${this.x}px`
             };
 
-            _keydown = (e) => {
+            _keydown(e) {
                 const arrows = ["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"]
                 if (arrows.includes(e.key)) {
                     console.log(e.key);
@@ -92,17 +92,27 @@
                 this.circleElement.style.top = `${this.y}px`
                 this.circleElement.style.left = `${this.x}px`
             };
+            _logPosition(e) {
+                console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
+            }
+            _showConfirm(e) {
+                // debugger
+                if (!confirm("Go to the link?")) {
+                    e.preventDefault(e);
+                }
+            }
 
             handleEvent = function (e) {
-
                 // console.log(e);
                 switch (e.type) {
                     case 'keydown':
                         this._keydown(e);
                         break;
                     case 'mousemove':
-                    // console.log(this);
-                        console.log(`mouse X ${e.clientX}; Y ${e.clientY}`);
+                        this._logPosition(e);
+                        break;
+                    case 'click':
+                        this._showConfirm(e)
                         break;
                 }
 
@@ -113,30 +123,27 @@
         // }
         // M.prototype._keydown = function (e) {
         // }
-        // move circle
+        // // move circle
         // M.prototype._move = function (dir, mv) {
         // }
+        // // log mouse position
+        // M.prototype._logPosition = function (e) {
+        // }
 
-        // log mouse position
-        M.prototype._logPosition = function (e) {
-
-        }
-
-        // showConfirm for links
-        M.prototype._showConfirm = function (e) {
-
-        }
+        // // showConfirm for links
+        // M.prototype._showConfirm = function (e) {
+        // }
 
         // handleEvent function look at constructor
         // M.prototype.handleEvent = function (e) {
         // }
 
-        // let circleElement = document.querySelector('div')
-        // let circleElementCoords = circleElement.getBoundingClientRect()
-        // console.log(circleElement)
+
         var m = new M(100, 100);
         window.addEventListener('keydown', m)
         window.addEventListener('mousemove', m)
+        m.circleElement.querySelector('a').addEventListener('click', m)
+        // m.cir.addEventListener('mousemove', m)
 
     </script>
 </body>
