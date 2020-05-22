@@ -10,6 +10,10 @@
     <section>
         <h2>Star Wars</h2>
         <ul id="star-wars"></ul>
+        <h2>Star Wars (myRequest)</h2>
+        <ul id="star-wars2"></ul>
+        <h2>Star Wars (fetch)</h2>
+        <ul id="star-wars3"></ul>
     </section>
 
     <section>
@@ -45,19 +49,25 @@
                     3. Render character names into the list - <ul id="star-wars"></ul>
                     */
 
+        const starWarsURL = "https://swapi.dev/api/people/"
+
         let xhrStarWarsApi = new XMLHttpRequest();
         let starWarsEl = document.querySelector('ul#star-wars')
         console.log(starWarsEl);
-        xhrStarWarsApi.open("GET", "https://swapi.dev/api/people/");
+        xhrStarWarsApi.open("GET", starWarsURL);
         xhrStarWarsApi.send();
         xhrStarWarsApi.addEventListener('load', (e) => {
-            let allPeopleJSON = JSON.parse(e.currentTarget.response);
-            let names = allPeopleJSON.results.map(item => `<li>${item.name}</li>`)
-            starWarsEl.innerHTML = names.join('')
+            let starWarsDate = JSON.parse(e.currentTarget.response);
+            renderCharacters(starWarsDate, starWarsEl)
         })
-        xhrStarWarsApi.addEventListener("error", e => {
+        xhrStarWarsApi.addEventListener("error", (e) => {
             console.log(e);
         })
+
+        function renderCharacters(allPeopleJSON, ulEl) {
+            let names = allPeopleJSON.results.map(item => `<li>${item.name}</li>`)
+            ulEl.innerHTML = names.join('')
+        }
         /*
                         2. Create function that fetches data with XMLHttpRequest but exposes Promises interface.
                             myRequest(url)
@@ -69,14 +79,53 @@
                                 })
 
                             1. For rendering the Star-Wars characters - switch from XMLHttpRequest to your "myRequest" function
-                        3. Try to use browser's fetch API
-                            1. For rendering the Star-Wars characters - try to switch to browsers fetch API
-                        4. Try to use async/await for interaction with
-                            1. myRequest
-                            2. fetch
         */
 
+        let starWarsEl2 = document.querySelector('ul#star-wars2')
 
+        function myRequest(url) {
+            return new Promise((resolve, reject) => {
+                let starWarsData = new XMLHttpRequest();
+                starWarsData.open("GET", url);
+                starWarsData.addEventListener("load", (e) => {
+                    resolve(e)
+                });
+                starWarsData.addEventListener('error', (e) => {
+                    reject(e)
+                });
+                starWarsData.send();
+
+            });
+        }
+
+        myRequest(starWarsURL)
+            .then(response => {
+                let starWarsDate = JSON.parse(response.currentTarget.response);
+                renderCharacters(starWarsDate, starWarsEl2)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        /*
+                3. Try to use browser's fetch API
+                    1. For rendering the Star-Wars characters - try to switch to browsers fetch API
+                                            */
+
+        let starWarsEl3 = document.querySelector('ul#star-wars3')
+        fetch('https://swapi.dev/api/people/')
+            .then(response => response.json())
+            .then(data => {
+                renderCharacters(data, starWarsEl3)
+            })
+            .catch(error => {
+                console.log('Fetch Error', error);
+            });
+
+        /*
+        4. Try to use async/await for interaction with
+            1. myRequest
+            2. fetch
+*/
         /*          Bonus Tasks
                         1. Websocket chat
                             1. Connect to WebSocket API
