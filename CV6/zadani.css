@@ -42,9 +42,6 @@ nav#menu ul {
 #menu-control-input {
     display: none;
 }
-#menu-control-input:checked + #menu {
-    display: none;
-}
 
 @media screen and (max-width: 500px) {
     #menu-control {
@@ -67,8 +64,41 @@ nav#menu ul {
         content: counter(item) ") ";
         color: orange;
     }
+    #menu-control-input:checked + #menu {
+        display: none;
+    }
 }
 
+label#custom-checkbox {
+    width: 100px;
+    height: 30px;
+    border: 1px solid #000;
+    background-color: lightblue;
+    border-radius: 30px;
+    display: block;
+    position: relative;
+}
+label#custom-checkbox::before, label#custom-checkbox::after{
+    position: absolute;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    content: " ";
+}
+#custom-checkbox-input:not(:checked) + label#custom-checkbox::before{
+    background-color: blue;
+    left: 0;
+}
+
+#custom-checkbox-input:checked + label#custom-checkbox::after{
+    background-color: orange;
+    right: 0;
+}
+
+
+input { 
+    display: none;
+}
 
 /* 
 p:target { opacity: 1; }
