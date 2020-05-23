@@ -14,6 +14,8 @@
         <ul id="star-wars2"></ul>
         <h2>Star Wars (fetch)</h2>
         <ul id="star-wars3"></ul>
+        <h2>Star Wars (async/await fetch)</h2>
+        <ul id="star-wars4"></ul>
     </section>
 
     <section>
@@ -83,8 +85,8 @@
 
         let starWarsEl2 = document.querySelector('ul#star-wars2')
 
-        function myRequest(url) {
-            return new Promise((resolve, reject) => {
+        async function myRequest(url) {
+            return await new Promise((resolve, reject) => {
                 let starWarsData = new XMLHttpRequest();
                 starWarsData.open("GET", url);
                 starWarsData.addEventListener("load", (e) => {
@@ -94,7 +96,6 @@
                     reject(e)
                 });
                 starWarsData.send();
-
             });
         }
 
@@ -106,13 +107,15 @@
             .catch(error => {
                 console.log(error)
             })
+
         /*
                 3. Try to use browser's fetch API
                     1. For rendering the Star-Wars characters - try to switch to browsers fetch API
                                             */
 
         let starWarsEl3 = document.querySelector('ul#star-wars3')
-        fetch('https://swapi.dev/api/people/')
+
+        fetch(starWarsURL)
             .then(response => response.json())
             .then(data => {
                 renderCharacters(data, starWarsEl3)
@@ -121,11 +124,27 @@
                 console.log('Fetch Error', error);
             });
 
-        /*
+
+                  /*
         4. Try to use async/await for interaction with
             1. myRequest
             2. fetch
 */
+        let starWarsEl4 = document.querySelector('ul#star-wars4')
+        async function fetchUrl(url) {
+            try {
+                let fetchResponse = await fetch(url);
+                let data = await fetchResponse.json();
+                renderCharacters(data, starWarsEl4)
+            }
+            catch(e) {
+                console.log('Welp, error:', e);
+            }
+        }
+        fetchUrl(starWarsURL)
+
+
+
         /*          Bonus Tasks
                         1. Websocket chat
                             1. Connect to WebSocket API
