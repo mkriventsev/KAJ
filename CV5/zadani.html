@@ -57,19 +57,18 @@
 
         let xhrStarWarsApi = new XMLHttpRequest();
         let starWarsEl = document.querySelector('ul#star-wars')
-        console.log(starWarsEl);
         xhrStarWarsApi.open("GET", starWarsURL);
         xhrStarWarsApi.send();
         xhrStarWarsApi.addEventListener('load', (e) => {
             let starWarsDate = JSON.parse(e.currentTarget.response);
             renderCharacters(starWarsDate, starWarsEl)
         })
-        xhrStarWarsApi.addEventListener("error", (e) => {
+        xhrStarWarsApi.addEventListener('error', (e) => {
             console.log(e);
         })
 
         function renderCharacters(allPeopleJSON, ulEl) {
-            let names = allPeopleJSON.results.map(item => `<li>${item.name}</li>`)
+            let names = allPeopleJSON.results.map((item) => `<li>${item.name}</li>`)
             ulEl.innerHTML = names.join('')
         }
         /*
@@ -152,43 +151,60 @@
                             2. When messages comes in, render it to the - <textarea id="chat">
                             3. When user types in text in <input type="text" id="chat-input"> and presses enter, send the message to the chat
 */
+        function createUsername(length) {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
 
-        const chatEl = document.querySelector("#chat");
-        const socket = new WebSocket(webSocketURL);
-        socket.addEventListener('open', function (e) {
-            socket.send('Hello Server!');
-        });
-        socket.addEventListener('message', function (event) {
-            console.log('Message from server ', event.data);
-            chatEl.innerHTML += `Message from server \n ${event.data}`
-            socket.close();
-        });
-
+        const usernameEl = document.createElement("p")
+        const chatEl = document.querySelector('#chat')
         const inputEl = document.querySelector('#chat-input')
-        inputEl.addEventListener('keydown', (e) => {
-            console.log(e);
+
+        const username = createUsername(6)
+        usernameEl.innerHTML = 'Your Username ' + username;
+
+        chatEl.insertAdjacentHTML('beforebegin', usernameEl.outerHTML)
+
+        const socket = new WebSocket(webSocketURL);
+        socket.addEventListener('open', (e) => {
+            chatEl.value = `You are connected to webSoket as ${username}\n`
+        });
+        socket.addEventListener('message', (e) => {
+            chatEl.value += e.data;
+        });
+
+
+        inputEl.addEventListener('keyup', (e) => {
             const message = e.target.value;
-            console.log(message);
+            if (e.code != 'Enter') {
+            }
+            else {
+                var d = new Date();
+                const sendMessage = `[${d.toLocaleString()}] ${username}: ${message} \n`
+                inputEl.value = ''
+                socket.send(sendMessage);
+            }
 
         })
-
 
 
         /*                        2. Mapy.cz API with XML response
                                     1. Fetch the data, the idea is the same, except we get XML instead of JSON as a response
                         */
 
-        // <ul id="mapy"></ul>
-// window
+
         const mapyEl = document.querySelector('#mapy')
         fetch(mapyURL)
             .then(res => res.text())
             .then(data => {
                 let parser = new DOMParser()
                 let doc = parser.parseFromString(data, "application/xml")
-                console.log(doc);
                 let items = doc.querySelectorAll("item");
-                console.log(items);
                 items.forEach(item => {
                     let liEl = document.createElement("p");
                     console.log(item.attributes.title);
