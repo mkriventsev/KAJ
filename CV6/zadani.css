@@ -20,7 +20,8 @@ nav#menu li {
 }
 
 nav#menu li:first-child a::after {
-    content: " new!";
+    /* content: " new!"; */
+    content: " " attr(data-state);
     color: red;
 }
 
@@ -63,3 +64,6 @@ nav#menu ul {
         color: orange;
     }
 }
+/* 
+p:target { opacity: 1; }
+[id]:not(:target) { display: none; } */
