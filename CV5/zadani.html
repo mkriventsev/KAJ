@@ -51,7 +51,9 @@
                     3. Render character names into the list - <ul id="star-wars"></ul>
                     */
 
-        const starWarsURL = "https://swapi.dev/api/people/"
+        const starWarsURL = 'https://swapi.dev/api/people/'
+        const webSocketURL = 'ws://salty-peak-74076.herokuapp.com/'
+        const mapyURL = 'https://api.mapy.cz/geocode?query=praha'
 
         let xhrStarWarsApi = new XMLHttpRequest();
         let starWarsEl = document.querySelector('ul#star-wars')
@@ -125,10 +127,10 @@
             });
 
 
-                  /*
-        4. Try to use async/await for interaction with
-            1. myRequest
-            2. fetch
+        /*
+4. Try to use async/await for interaction with
+  1. myRequest
+  2. fetch
 */
         let starWarsEl4 = document.querySelector('ul#star-wars4')
         async function fetchUrl(url) {
@@ -137,12 +139,11 @@
                 let data = await fetchResponse.json();
                 renderCharacters(data, starWarsEl4)
             }
-            catch(e) {
+            catch (e) {
                 console.log('Welp, error:', e);
             }
         }
         fetchUrl(starWarsURL)
-
 
 
         /*          Bonus Tasks
@@ -150,9 +151,38 @@
                             1. Connect to WebSocket API
                             2. When messages comes in, render it to the - <textarea id="chat">
                             3. When user types in text in <input type="text" id="chat-input"> and presses enter, send the message to the chat
-                        2. Mapy.cz API with XML response
-                            1. Fetch the data, the idea is the same, except we get XML instead of JSON as a response
-                */
+*/
+
+
+
+        /*                        2. Mapy.cz API with XML response
+                                    1. Fetch the data, the idea is the same, except we get XML instead of JSON as a response
+                        */
+
+        // <ul id="mapy"></ul>
+
+        const mapyEl = document.querySelector('ul#mapy')
+
+        fetch(mapyURL)
+            .then(res => res.text())
+            .then(data => {
+                let parser = new DOMParser()
+                let doc = parser.parseFromString(data, "application/xml")
+                console.log(doc);
+                let items = doc.querySelectorAll("item");
+                console.log(items);
+                items.forEach(item => {
+                    let liEl = document.createElement("p");
+                    console.log(item.attributes.title);
+                    liEl.innerHTML = `<li>${item.attributes.title.value}. <ul> <li> <b>Latitude</b>: ${item.attributes.y.value}.</li> <li> <b>Longitude</b>: ${item.attributes.x.value}</li></ul></li>`
+                    mapyEl.appendChild(liEl);
+                });
+
+            })
+            .catch(error => {
+                console.log('Fetch Error', error);
+            });
+            
 
     </script>
 </body>
