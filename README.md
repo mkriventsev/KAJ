@@ -1,16 +1,16 @@
 # KAJ
 
-- [x] CVICENI 1 -
+- [x] CVICENI 1 - <https://mkriventsev.github.io/KAJ/CV1/zadani.html>
 
-- [x] CVICENI 2
+- [x] CVICENI 2 - <https://mkriventsev.github.io/KAJ/CV2/zadani.html>
 
-- [x] CVICENI 3
+- [x] CVICENI 3 - <https://mkriventsev.github.io/KAJ/CV3/zadani.html>
 
-- [x] CVICENI 4
+- [x] CVICENI 4 - <https://mkriventsev.github.io/KAJ/CV4/zadani.html>
 
-- [x] CVICENI 5
+- [x] CVICENI 5 - <https://mkriventsev.github.io/KAJ/CV5/zadani.html>
 
-- [x] CVICENI 6
+- [x] CVICENI 6 - <https://mkriventsev.github.io/KAJ/CV6/zadani.html>
 
 - [ ] CVICENI 7
 
