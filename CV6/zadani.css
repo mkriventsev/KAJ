@@ -10,11 +10,13 @@ nav#menu a {
     color: white;
     text-decoration: none;
     padding: 5px 20px;
+    display: block;
 }
 
 nav#menu li{
-    margin-right: 5px;
-    
+    margin-right: 0px;
+    padding:0px;
+
 }
 nav#menu li:first-child a::after {
     content: " new!";
@@ -25,4 +27,26 @@ nav#menu ul {
     list-style-type: none;
     display: flex;
     padding: 0px;
+}
+#menu-control{
+    background-color: black;
+    padding: 5px 20px;
+    color: white;
+    display: none;
+}
+#menu-control-input {
+    display: none;
+}
+
+@media screen and (max-width: 500px){
+    #menu-control {
+        display: inline-block;
+    }
+    nav#menu ul {
+        display: block;
+    }
+    #menu ul {
+        margin:0;
+        padding: 0;
+    }
 }
