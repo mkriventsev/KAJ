@@ -11,13 +11,14 @@ nav#menu a {
     text-decoration: none;
     padding: 5px 20px;
     display: block;
+    /* margin: 0px 2.5px; */
 }
 
-nav#menu li{
-    margin-right: 0px;
-    padding:0px;
-
+nav#menu li {
+    margin-right: 5px;
+    padding: 0;
 }
+
 nav#menu li:first-child a::after {
     content: " new!";
     color: red;
@@ -26,27 +27,39 @@ nav#menu li:first-child a::after {
 nav#menu ul {
     list-style-type: none;
     display: flex;
-    padding: 0px;
+    padding: 0;
 }
-#menu-control{
+
+#menu-control {
     background-color: black;
     padding: 5px 20px;
     color: white;
     display: none;
 }
+
 #menu-control-input {
     display: none;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
     #menu-control {
         display: inline-block;
     }
     nav#menu ul {
         display: block;
-    }
-    #menu ul {
-        margin:0;
+        margin: 0;
         padding: 0;
+    }
+    nav#menu li {
+        margin-right: 0;
+        padding: 0;
+    }
+    nav#menu {
+        counter-reset: item;
+    }
+    nav#menu li a::before {
+        counter-increment: item;
+        content: counter(item) ") ";
+        color: orange;
     }
 }
