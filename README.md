@@ -12,7 +12,7 @@
 
 - [x] CVICENI 6 - <https://mkriventsev.github.io/KAJ/CV6/zadani.html>
 
-- [ ] CVICENI 7
+- [x] CVICENI 7 - <https://mkriventsev.github.io/KAJ/CV7/zadani.html>
 
 - [ ] CVICENI 8
 
