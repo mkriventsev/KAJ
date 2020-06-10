@@ -14,7 +14,7 @@
 
 - [x] CVICENI 7 - <https://mkriventsev.github.io/KAJ/CV7/zadani.html>
 
-- [ ] CVICENI 8 - <https://mkriventsev.github.io/KAJ/CV8/zadani.html>
+- [x] CVICENI 8 - <https://mkriventsev.github.io/KAJ/CV8/zadani>
 
 - [ ] CVICENI 9
 
