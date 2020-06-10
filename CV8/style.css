@@ -1,0 +1,188 @@
+/*
+Docs
+
+Transforms
+https://developer.mozilla.org/en/docs/Web/CSS/transform
+Transitions
+https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Transitions/Using_CSS_transitions
+Filters
+https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+Animations
+https://www.w3schools.com/css/css3_animations.asp
+*/
+
+/* Box */
+
+/* <!--
+vyzkoušejte si na připraveném boxíku css vlastnosti transform a transition
++ rotaci o 360 stupňů
++ zvětšení
++ změnu barvy
+--> */
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+    transition: all 0.5s ease;
+    background: lightgreen;
+}
+
+.box-toggle:checked~.box {
+    transform: scale(2.0) rotate(7200deg) scaleY(.5) skewY(25deg);
+    background: lightblue;
+}
+
+/* Side menu */
+
+/* <!--
+Naprogramujte boční menu, které vyjíždí z pravé strany
++ použijte transform translate
++ menu ma výšku stejnou jako obrazovka
++ vyzkoušete různé časove fce: ease, ease-in, ...
+--> */
+
+.menu {
+    height: 100vh;
+    width: 150px;
+    position: fixed;
+    /* position: absolute; */
+    /* left: calc(100% - 150px); */
+    top: 0px;
+    left: 100%;
+    background-color: lightyellow;
+    transition: transform ease-in-out;
+    transition-duration: 0.2s;
+}
+
+body.menu-visible .menu {
+    transform: translate(-150px);
+}
+
+/* Modal */
+
+/* <!--
++ Vyrobte modalní okno, jehož zobrazení bude animované (zoom), 
++ a na zbytek stránky aplikujte animovaný filtr rozostření
++ okno bude vycentrované horitontálně i vertikálně
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/filter
+--> */
+
+body.modal-visible .page-wrapper {
+    /* overflow: hidden; */
+    transition: filter 1s ease-in;
+    filter: blur(10px) saturate(20%);
+}
+
+body.modal-visible {
+    overflow: hidden;
+}
+
+.modal {
+    /* display: none; */
+    display: flex;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body.modal-visible .modal {
+    /* display: flex; */
+    visibility: visible;
+}
+
+.modal-content {
+    padding: 20px;
+    width: 400px;
+    height: 400px;
+    border: olive 1px solid;
+    background-color: papayawhip;
+    transform: scale(0);
+    transition: transform 1s ease;
+}
+
+body.modal-visible .modal-content {
+    transform: scale(1.5);
+}
+
+/* Sprite animations */
+
+/* <!--
+Vyzkoušejte si na testovacím boxíku jak fungují animace
+Vyrobte pomocí sprite, chodícího panáčka
++ sprite: http://seznam.github.io/CVUT/KAJ/cviceni/08/sprite.png
++ zamyslete se nad použitím časove fce.: step()
++ animace jsou dvě: + změna polohy background image v divu
+                    + posun divu samotného 
+--> */
+
+.sprite-wrapper {
+    overflow: hidden;
+    background: lightblue;
+    width: 768px;
+    background-color: red;
+    animation-name: example;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+}
+
+.sprite {
+    /* sprite has 6 frames, each is 256x256. Total width is 256 * 6 = 1536px */
+    width: 256px;
+    height: 256px;
+    background-image: url('sprite.png');
+    animation: run 1s infinite steps(6), move 6s linear infinite normal;
+    /* transform: translateX(-100%); */
+}
+
+@keyframes move {
+    from {
+        transform: translateX(-100%)
+        scaleX(1);
+    }
+    49% {
+        transform: translateX(300%)
+        scaleX(1);
+    }
+    50% {
+        transform: translateX(300%)
+        scaleX(-1);
+    }
+    to {
+        transform: translateX(-100%)
+        scaleX(-1);
+    }
+}
+
+@keyframes run {
+    100% {
+        background-position: -1536px 0;
+    }
+}
+
+@keyframes example {
+    from {
+        background-color: red;
+    }
+    25% {
+        background-color: yellow;
+    }
+    50% {
+        background-color: blue;
+    }
+    75% {
+        background-color: green;
+    }
+    to {
+        background-color: red;
+    }
+}

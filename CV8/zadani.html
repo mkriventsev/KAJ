@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Lecture 08</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+        <h2>Little box to play with transitions and animations</h2>
+
+        <input type="checkbox" class="box-toggle" id="box-toggle">
+        <label for="box-toggle">Box toggle
+        </label>
+        <div class="box">Hi!</div>
+        <hr>
+
+        <h2>Menu</h2>
+
+        <button class="menu-button">Show/Hide Menu</button>
+
+        <nav class="menu">
+            <ul>
+                <li>Prvni</li>
+                <li>Druhy</li>
+                <li>Treti</li>
+                <li>Ctvrty</li>
+                <li>Paty</li>
+            </ul>
+        </nav>
+
+        <hr>
+
+        <h2>Modal</h2>
+
+        <button class="modal-button">
+            Modal show
+        </button>
+
+        <hr>
+
+        <h2>Sprite animations</h2>
+
+        <section class="sprite-wrapper">
+            <div class="sprite">
+            </div>
+        </section>
+
+        <hr>
+
+        <h2>Add lots of text here to see how modal and side menu works</h2>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim ullam, officiis voluptatibus. Maxime numquam,
+            obcaecati odio modi voluptas, dolores maiores deserunt explicabo eligendi ut debitis saepe similique
+            pariatur ducimus quidem.</p>
+    </div>
+
+    <div class="modal">
+        <div class="modal-content">
+            <button class="modal-button">
+                Close
+            </button>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim ullam, officiis voluptatibus. Maxime
+                numquam, obcaecati odio modi voluptas, dolores maiores deserunt explicabo eligendi ut debitis saepe
+                similique pariatur ducimus quidem.</p>
+        </div>
+    </div>
+
+    <script>
+        // Menu logic
+
+        let menuVisible = false;
+        const menuButton = document.querySelector('.menu-button');
+
+        menuButton.addEventListener('click', toggleMenuState)
+
+        function toggleMenuState() {
+            menuVisible = !menuVisible;
+            if (menuVisible) {
+                document.body.classList.add('menu-visible');
+            } else {
+                document.body.classList.remove('menu-visible');
+            }
+        }
+
+        // Modal logic
+
+        let modalVisible = false;
+        const modalButtons = document.querySelectorAll('.modal-button');
+        const pageWrapper = document.querySelectorAll('.page-wrapper');
+        const modal = document.querySelector('.modal');
+
+        for (let i = 0; i < modalButtons.length; i++) {
+            modalButtons[i].addEventListener('click', toggleModalState)
+        }
+
+        function toggleModalState() {
+            modalVisible = !modalVisible;
+            if (modalVisible) {
+                document.body.classList.add('modal-visible');
+            } else {
+                document.body.classList.remove('modal-visible');
+            }
+        }
+    </script>
+
+</body>
+
+</html>
