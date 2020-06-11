@@ -82,13 +82,13 @@
                 this.svg = document.querySelector(svgElement);
                 this.svgNs = 'http://www.w3.org/2000/svg';
                 this.svg.addEventListener('click', (e) => {
-                    this.drawCircle(e)
+                    this.outerFunction(e)
                 })
             }
-            outerFunction(){
+            outerFunction(e){
                 const x = e.offsetX;
                 const y = e.offsetY;
-                drawCircle(x,y)
+                this.drawCircle(x,y)
             }
 
             drawCircle(x,y) {   
