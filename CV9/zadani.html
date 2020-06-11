@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+
+    <title>Lecture 09</title>
+
+    <style>
+        section {
+            display: inline-block;
+        }
+
+        svg {
+            background: lightblue;
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Test</h2>
+
+    <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="40" stroke="magenta" stroke-width="0.5" fill="orange" />
+        <circle cx="30" cy="40" r="5" stroke="green" stroke-width="0.4" fill="red" />
+        <circle cx="70" cy="40" r="5" stroke="yellow" stroke-width="0.4" fill="blue" />
+        <path d="M50 45 L50 55" fill="transparent" stroke="yellow" stroke-width="3" stroke-linejoin="round"
+            stroke-linecap="round" />
+        <!-- <path d="M25 65 Q 20 70, 75 65 "  fill="transparent" stroke="yellow" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" /> -->
+        <path d="M26 65 C 45 80, 70 65, 77 65 Z" fill="transparent" stroke="green" stroke-width="4"
+            stroke-linejoin="square" stroke-linecap="round" />
+    </svg>
+
+    <h2>SVG Paint</h2>
+    <ul>
+        <li>LMB – draw</li>
+        <li>Ctrl/Cmd + Left mouse button – new path + draw</li>
+        <li>Shift + Left mouse button – clear</li>
+    </ul>
+
+    <svg id="svg1"></svg>
+
+    <script>
+        /*
+            Docs
+                Positions
+                    https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Positions
+                Basics
+                    https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Basic_Shapes
+                Paths
+                    https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
+                Bezier curves
+                    https://en.wikipedia.org/wiki/B%C3%A9zier_curve
+                Fills and strokes
+                    https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
+
+            Excercises
+                +1. Take a look a the docs
+                +2. Draw some basic shapes
+                +3. Play with "viewbox"
+                +4. Draw line paths
+                    + use path element
+                    + try to create it with createElementNS and setAttributeNS
+                +5. Draw bezier paths
+                +6. Draw smiley face
+
+                7. Create SVG painter class
+                    +a. Listen on svg wrapper click events
+                    +b. Draw circle at the position of each click
+                    c. Draw svg path where user clicked
+                    d. Create new path with ctrl/cmd + left mouse button
+                    e. Clear svg with shift + left mouse button
+        */
+
+        class SvgPaint {
+            constructor(svgElement) {
+                this.svg = document.querySelector(svgElement);
+                this.svgNs = 'http://www.w3.org/2000/svg';
+                this.svg.addEventListener('click', (e) => {
+                    this.drawCircle(e)
+                })
+            }
+            outerFunction(){
+                const x = e.offsetX;
+                const y = e.offsetY;
+                drawCircle(x,y)
+            }
+
+            drawCircle(x,y) {   
+                // <circle cx="30" cy="40" r="5" stroke="green" stroke-width="0.4" fill="red"></circle>
+                const circle = document.createElementNS(this.svgNs, 'circle');
+                console.log(circle);
+                setAttributesNS(circle, {
+                    'cx': x,
+                    'cy': y,
+                    'r': 5,
+                    'stroke': 'green',
+                    'stroke-width': '1',
+                    "fill": "orange"
+                });
+                console.log(circle);
+                this.svg.appendChild(circle);
+            }
+
+
+        }
+        function setAttributesNS(elem, attrs) {
+            for (var key in attrs) {
+                elem.setAttributeNS(null, key, attrs[key]);
+            }
+        }
+        // svgEl = document.querySelector('#svg1')
+        // svgEl.addEventListener('click',(e)=>{console.log(e)})
+        new SvgPaint('#svg1')
+
+    </script>
+
+
+
+
+</body>
+
+</html>
