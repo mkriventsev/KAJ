@@ -14,7 +14,7 @@
 </style>
 
 <body>
-	<canvas width="800" height="400"></canvas>
+	<canvas width="800" height="800"></canvas>
 	<script type="text/javascript">
 		/*
 			1. study
@@ -24,9 +24,9 @@
 			2. create shooter game
 				+ draw background
 				+ start drawing with request animation frame
-				- use ships array and render ships to canvas
-				- make them moving from bottom to top with various speed
-				- when they fly out of the screen, reposition them to the bottom
+				+ use ships array and render ships to canvas
+				+ make them moving from bottom to top with various speed
+				+ when they fly out of the screen, reposition them to the bottom
 				- add event listener to catch mouse click position
 				- calculate if ship was clicked
 				- destroy ship with click
@@ -46,22 +46,38 @@
 		const shipImage = new Image()
 		canvasBackgroundImage.src = 'media/space.jpg'
 		shipImage.src = 'media/spaceship_sprite.png'
-		
 		canvasBackgroundImage.onload = function () {
-			ctx.drawImage(this, 1, 1, WIDTH, HEIGHT);
+			ctx.drawImage(this, 0, 0);
+		}
+
+		function refreshCanvas() {
+			ctx.clearRect(0, 0, WIDTH, HEIGHT);
+			ctx.drawImage(canvasBackgroundImage, 1, 1, WIDTH, HEIGHT);
 		}
 
 		function draw(id) {
-			let sec = id / 1000;
-			drawShips(sec)
+			let iter = id / 10;
+			console.log(iter);
+			refreshCanvas()
+			drawShips(iter)
 			// ctx.drawImage(shipImage, 100, 50);
 			window.requestAnimationFrame(draw);
 		}
 
 		function drawShips(sec) {
 			ships.forEach(ship => {
-				ctx.drawImage(shipImage, ship.x, sec*10);
-				console.log(HEIGHT);
+				ship.y -= ship.speed;
+				if (ship.y < 0 - shipImage.height) {
+					ship.y = HEIGHT
+				}
+
+				// let shipY = sec
+				// // console.log(shipY);
+				// if (shipY >= HEIGHT)
+				// {
+				// 	shipY -= HEIGHT
+				// }
+				ctx.drawImage(shipImage, ship.x, ship.y);
 			});
 
 		}
