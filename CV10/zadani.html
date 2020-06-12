@@ -43,25 +43,26 @@
 		const HEIGHT = canvas.offsetHeight;
 
 		const canvasBackgroundImage = new Image()
+		const shipImage = new Image()
+		canvasBackgroundImage.src = 'media/space.jpg'
+		shipImage.src = 'media/spaceship_sprite.png'
+		
+		canvasBackgroundImage.onload = function () {
+			ctx.drawImage(this, 1, 1, WIDTH, HEIGHT);
+		}
 
-		function init() {
-			canvasBackgroundImage.src = 'media/space.jpg'
-			canvasBackgroundImage.onload = function () {
-				ctx.drawImage(this, 1, 1, WIDTH, HEIGHT);
-			}
+		function draw(id) {
+			let sec = id / 1000;
+			drawShips(sec)
+			// ctx.drawImage(shipImage, 100, 50);
 			window.requestAnimationFrame(draw);
 		}
 
-		function draw(){
-			drawShips()
-			window.requestAnimationFrame(draw);
-		}
-
-		function drawShips(){
+		function drawShips(sec) {
 			ships.forEach(ship => {
-				
+				ctx.drawImage(shipImage, ship.x, sec*10);
+				console.log(HEIGHT);
 			});
-
 
 		}
 		// game state
@@ -76,8 +77,7 @@
 			{ x: 700, y: HEIGHT, speed: 0.3 },
 			{ x: 800, y: HEIGHT, speed: 1.5 }
 		]
-
-		init()
+		requestAnimationFrame(draw);
 	</script>
 </body>
 
