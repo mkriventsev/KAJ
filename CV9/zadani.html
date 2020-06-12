@@ -43,7 +43,9 @@
         <li>Shift + Left mouse button – clear</li>
     </ul>
 
-    <svg id="svg1"></svg>
+    <svg id="svg1">
+        <!-- <path d="M0 0 L0 10" fill="transparent" stroke="yellow" stroke-width="3" stroke-linejoin="round"></path> -->
+    </svg>
 
     <script>
         /*
@@ -72,29 +74,76 @@
                 7. Create SVG painter class
                     +a. Listen on svg wrapper click events
                     +b. Draw circle at the position of each click
-                    c. Draw svg path where user clicked
-                    d. Create new path with ctrl/cmd + left mouse button
-                    e. Clear svg with shift + left mouse button
+                    +c. Draw svg path where user clicked
+                    +d. Create new path with ctrl/cmd + left mouse button
+                    +e. Clear svg with shift + left mouse button
         */
 
         class SvgPaint {
             constructor(svgElement) {
                 this.svg = document.querySelector(svgElement);
                 this.svgNs = 'http://www.w3.org/2000/svg';
+                const path = document.createElementNS(this.svgNs, "path");
+                setAttributesNS(path, {
+                    'fill': 'transparent',
+                    'stroke': 'red',
+                    'stroke-width': '3',
+                    'stroke-linejoin': 'round'
+                })
+                this.svg.appendChild(path);
+                this.path = path;
                 this.svg.addEventListener('click', (e) => {
+                    if (e.metaKey){
+                        this.createNewPath()
+                    } 
+                    if (e.shiftKey){
+                        this.clearAllCVG()
+                        this.createNewPath()
+                    } 
                     this.outerFunction(e)
                 })
             }
-            outerFunction(e){
+            outerFunction(e) {
                 const x = e.offsetX;
                 const y = e.offsetY;
-                this.drawCircle(x,y)
+
+                this.drawCircle(x, y);
+                this.drawLine(x, y)
+            }
+            createNewPath() {
+                const path = document.createElementNS(this.svgNs, "path");
+                setAttributesNS(path, {
+                    'fill': 'transparent',
+                    'stroke': 'red',
+                    'stroke-width': '3',
+                    'stroke-linejoin': 'round'
+                })
+                this.svg.appendChild(path);
+                this.path = path;
+            }
+            clearAllCVG(){
+                console.log(this);
+                this.svg.querySelectorAll('*').forEach(n => n.remove());
+                this.path.attributes.d.nodeValue = ''
+                // this.querySelectorAll('*').forEach(n => n.remove());
             }
 
-            drawCircle(x,y) {   
-                // <circle cx="30" cy="40" r="5" stroke="green" stroke-width="0.4" fill="red"></circle>
+            // <path d="M50 45 L50 55" fill="transparent" stroke="yellow" stroke-width="3" stroke-linejoin="round"
+            drawLine(x, y) {
+                let line = this.path.getAttributeNS(null, "d")
+                if (!line) {
+                    this.path.setAttributeNS(null, "d", `M ${x} ${y}`);
+                } else {
+                    line += ` L ${x} ${y}`;
+                    this.path.setAttributeNS(null, "d", line);
+                }
+
+                console.log(line)
+            }
+
+            // <circle cx="30" cy="40" r="5" stroke="green" stroke-width="0.4" fill="red"></circle>
+            drawCircle(x, y) {
                 const circle = document.createElementNS(this.svgNs, 'circle');
-                console.log(circle);
                 setAttributesNS(circle, {
                     'cx': x,
                     'cy': y,
@@ -106,7 +155,6 @@
                 console.log(circle);
                 this.svg.appendChild(circle);
             }
-
 
         }
         function setAttributesNS(elem, attrs) {
