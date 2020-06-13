@@ -84,8 +84,9 @@
 		const WIDTH = canvas.offsetWidth;
 		const HEIGHT = canvas.offsetHeight;
 
-		const soundExplosion = new Audio("explosion.mp3");
-		const soundMiss = new Audio("miss.mp3");
+		const soundExplosion = new Audio("media/explosion.mp3");
+		const soundMiss = new Audio("media/miss.mp3");
+		soundMiss.crossOrigin = 'anonymous';
 
 		const canvasBackgroundImage = new Image()
 		const shipImage = new Image()
@@ -107,6 +108,7 @@
 
 		function handleClick(e) {
 			soundMiss.pause();
+			console.log('miss paused');
 			soundMiss.currentTime = 0;
 			soundExplosion.pause();
 			soundExplosion.currentTime = 0;
@@ -123,6 +125,8 @@
 
 		function clickOnShip(e) {
 			let clicked;
+			soundMiss.play();
+			console.log(soundMiss);
 			ships.forEach(ship => {
 				if ((e.layerX > ship.x && e.layerX < ship.x + shipImage.width) && (e.layerY > ship.y && e.layerY < ship.y + shipImage.width)) {
 					console.log(` ${e.layerX} inside [${ship.x} - ${ship.x + shipImage.width}]`);
@@ -136,9 +140,11 @@
 				}
 			})
 			if (clicked) {
+				console.log('play Epx');
 				soundExplosion.play();
 			}
 			else {
+				console.log('play Miss');
 				soundMiss.play();
 			};
 		}
