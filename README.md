@@ -20,6 +20,6 @@
 
 - [x] CVICENI 10 - <https://mkriventsev.github.io/KAJ/CV10/zadani>
 
-- [ ] CVICENI 11
+- [x] CVICENI 11- <https://mkriventsev.github.io/KAJ/CV11/zadani>
 
 - [ ] CVICENI 12

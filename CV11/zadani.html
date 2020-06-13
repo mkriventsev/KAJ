@@ -51,15 +51,15 @@
 		<h2>Log</h2>
 
 		<h2>History entries</h2>
-		<ul id="history-entries">History entries</ul>
+		<ul id="history-entries"></ul>
 	</section>
 
 	<section data-route="#imageinfo">
 		<h2>Image Info</h2>
 
-		<div id="dnd">dnd</div>
-		<ul id="imgInfo">imginfo</ul>
-		<div id="imgCnt">imgcnt</div>
+		<div id="dnd"></div>
+		<ul id="imgInfo"></ul>
+		<div id="imgCnt"></div>
 	</section>
 
 
@@ -92,11 +92,11 @@
 					Look at popstate event on window and use addEventListener to listen on that event
 			2. LocalStorage
 				+ Take a look at LocalStorage API
-				- In local storage - save every user access of website, when he comes to the page save the date he came
-				- On "accesslog" page display all of the dates he accessed the page
+				+ In local storage - save every user access of website, when he comes to the page save the date he came
+				+ On "accesslog" page display all of the dates he accessed the page
 			3. File API and Drag'n'Drop
-				- On second page use Drag and Drop API so user can drag and drop image to the rectangle
-				- When user drops image, use File Reader API to read and display name, size and type of image
+				+ On second page use Drag and Drop API so user can drag and drop image to the rectangle
+				+ When user drops image, use File Reader API to read and display name, size and type of image
 		*/
 		class MyApp {
 			constructor() {
@@ -105,14 +105,56 @@
 
 
 				window.addEventListener('popstate', e => {
+					console.log(e);
 					this.popStateHandler()
 				});
+
+				this.log();
+				// this.dnd();
+
+				this.dnd = document.querySelector("#dnd");
+				this.imgCnt = document.querySelector("#imgCnt");
+				this.imgInfo = document.querySelector("#imgInfo");
+
+				this.dnd.addEventListener("drop", e => {
+					e.preventDefault();
+					let files = e.dataTransfer.files;
+					console.log(files);
+					for (const file of files) {
+						if (file['type'].split('/')[0] != 'image') {
+							console.log('no image');
+						} else {
+							console.log('yes, image!');
+							const fileReader = new FileReader();
+							fileReader.addEventListener('load', e => {
+								const loadedImage = new Image();
+								loadedImage.width = window.innerWidth;
+
+								loadedImage.src = fileReader.result;
+								imgCnt.appendChild(loadedImage);
+
+								let imageEl = document.createElement('li');
+								// When user drops image, use File Reader API to read and display name, size and type of image
+								imageEl.innerHTML = `name: ${file.name} size: ${file.size} name: ${file.type}`;
+								imgInfo.appendChild(imageEl);
+							})
+							fileReader.readAsDataURL(file);
+						}
+					}
+
+					// 			<ul id="imgInfo">imginfo</ul>
+					// <div id="imgCnt">imgcnt</div>
+				});
+
+				this.dnd.addEventListener("dragover", e => e.preventDefault());
+
 
 			}
 
 			popStateHandler() {
 				let hashChanged = false;
 				console.log(window.location.hash);
+				console.log(window.location);
 				console.log(this.appPages);
 				this.appPages.forEach(appPage => {
 					if (window.location.hash == appPage.getAttribute('data-route')) {
@@ -120,6 +162,7 @@
 						hashChanged = true
 					}
 				})
+				console.log('hashChanged' + hashChanged);
 				if (!hashChanged) {
 					this.changeToPage('#accesslog');
 				}
@@ -132,6 +175,23 @@
 					appPage.getAttribute('data-route') == newHash ? appPage.classList.add("is-visible") : appPage.classList.remove("is-visible")
 					console.log(appPage.getAttribute('class'));
 				});
+			}
+			log() {
+				let log
+				var utc = new Date().toJSON().slice(0, 19).replace('T', ' ');
+
+				localStorage.getItem('log') ? log = localStorage.getItem('log') : log = utc + ' first entrance';
+
+				const logs = log.split(',')
+
+				logs.push(utc)
+				console.log(logs);
+
+				localStorage.setItem("log", logs);
+
+
+				let historyEntriesEl = document.querySelector('#history-entries')
+				historyEntriesEl.innerHTML = logs.map(log => `<li>${log}</li>`).join('')
 			}
 
 			// appPages.sdocument.addEventListener()
