@@ -11,10 +11,51 @@
 		box-shadow: 2px 2px 3px #a0a0a0;
 		cursor: crosshair;
 	}
+
+	.res {
+		width: 800px;
+		text-align: center;
+		position: absolute;
+		top: 150px;
+
+		font-size: 54px;
+		color: red
+	}
+
+	#stat {
+		width: 800px;
+		display: flex;
+		justify-content: space-evenly;
+		font-family: "Lucida Console", Courier, monospace;
+		font-size: 20px;
+	}
+
+	#shoots>p {
+		color: blue;
+	}
+
+	#killed>p {
+		color: red;
+	}
+
+	#lives>p {
+		color: green;
+	}
 </style>
 
 <body>
-	<canvas width="800" height="800"></canvas>
+	<canvas width="800" height="500"></canvas>
+	<div id=stat>
+		<div id="shoots">
+			<p>TOTAL SHOOTS: <span></span></p>
+		</div>
+		<div id="killed">
+			<p>SHIPS KILLED: <span></span></p>
+		</div>
+		<div id="lives">
+			<p>LIVES LEFT: <span></span></p>
+		</div>
+	</div>
 	<script type="text/javascript">
 		/*
 			1. study
@@ -28,19 +69,23 @@
 				+ make them moving from bottom to top with various speed
 				+ when they fly out of the screen, reposition them to the bottom
 				+ add event listener to catch mouse click position
-				- calculate if ship was clicked
-				- destroy ship with click
-				- add sounds
+				+ calculate if ship was clicked
+				+ destroy ship with click
+				+ add sounds
 		*/
 
 		// global config
-		const speedMultiplier = 0.1;
+		let speedMultiplier = 1;
+		let gameIsOver = false
 
 		// some constanst
 		const canvas = document.querySelector('canvas');
 		const ctx = canvas.getContext('2d');
 		const WIDTH = canvas.offsetWidth;
 		const HEIGHT = canvas.offsetHeight;
+
+		const soundExplosion = new Audio("explosion.mp3");
+		const soundMiss = new Audio("miss.mp3");
 
 		const canvasBackgroundImage = new Image()
 		const shipImage = new Image()
@@ -49,15 +94,58 @@
 		canvasBackgroundImage.onload = function () {
 			ctx.drawImage(this, 0, 0);
 		}
-		canvas.addEventListener('click', (e)=>{
-			console.log(e.layerX,' ',e.layerY);
-		})
+
+		let shootsCount = 0, shipsKilled = 0, livesCount = 10;
+
+		shootsEl = document.querySelector('#shoots p span');
+		killedEl = document.querySelector('#killed p span');
+		livesEl = document.querySelector('#lives p span');
+
+		updateStat()
+
+		canvas.addEventListener('click', handleClick)
+
+		function handleClick(e) {
+			soundMiss.pause();
+			soundMiss.currentTime = 0;
+			soundExplosion.pause();
+			soundExplosion.currentTime = 0;
+			shootsCount += 1;
+			updateStat();
+			clickOnShip(e)
+		}
+
+		function updateStat() {
+			shootsEl.innerHTML = shootsCount;
+			killedEl.innerHTML = shipsKilled;
+			livesEl.innerHTML = livesCount;
+		}
+
+		function clickOnShip(e) {
+			let clicked;
+			ships.forEach(ship => {
+				if ((e.layerX > ship.x && e.layerX < ship.x + shipImage.width) && (e.layerY > ship.y && e.layerY < ship.y + shipImage.width)) {
+					console.log(` ${e.layerX} inside [${ship.x} - ${ship.x + shipImage.width}]`);
+					ship.y = HEIGHT;
+					ship.x = Math.floor(Math.random() * 800 - shipImage.width) + shipImage.width / 2;
+					shipsKilled += 1;
+					soundExplosion.play();
+					speedMultiplier += 0.1
+					updateStat();
+					clicked = true
+				}
+			})
+			if (clicked) {
+				soundExplosion.play();
+			}
+			else {
+				soundMiss.play();
+			};
+		}
 
 		function draw(id) {
-			let iter = id / 10;
-			// console.log(iter);
 			refreshCanvas()
-			drawShips(iter)
+			drawShips(id)
 			window.requestAnimationFrame(draw);
 		}
 
@@ -68,13 +156,29 @@
 
 		function drawShips(sec) {
 			ships.forEach(ship => {
-				ship.y -= ship.speed;
+				ship.y -= ship.speed * speedMultiplier;
 				if (ship.y < 0 - shipImage.height) {
-					ship.y = HEIGHT
+					ship.y = HEIGHT;
+					livesCount -= 1;
+					if (livesCount >= 0) {
+						!livesCount ? endGame() : updateStat();
+					}
 				}
-				// ship.x = 
 				ctx.drawImage(shipImage, ship.x, ship.y);
 			});
+		}
+		function endGame() {
+			updateStat();
+			gameIsOver = true
+			canvas.style.filter = 'blur(10px) grayscale(0.6)'
+			// window.cancelAnimationFrame()
+			canvas.removeEventListener('click', handleClick)
+			ctx.fillStyle = "red";
+			ctx.font = "italic bold 35pt Tahoma";
+			newEl = document.createElement("div")
+			newEl.className += 'res'
+			newEl.innerHTML = `<p>YOU DEAD.</p`
+			document.body.appendChild(newEl);
 
 		}
 		// game state
@@ -89,7 +193,7 @@
 			{ x: 700, y: HEIGHT, speed: 0.3 },
 			{ x: 800, y: HEIGHT, speed: 1.5 }
 		]
-		requestAnimationFrame(draw);
+		window.requestAnimationFrame(draw);
 	</script>
 </body>
 
