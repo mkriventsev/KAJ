@@ -27,7 +27,7 @@
 				+ use ships array and render ships to canvas
 				+ make them moving from bottom to top with various speed
 				+ when they fly out of the screen, reposition them to the bottom
-				- add event listener to catch mouse click position
+				+ add event listener to catch mouse click position
 				- calculate if ship was clicked
 				- destroy ship with click
 				- add sounds
@@ -49,19 +49,21 @@
 		canvasBackgroundImage.onload = function () {
 			ctx.drawImage(this, 0, 0);
 		}
+		canvas.addEventListener('click', (e)=>{
+			console.log(e.layerX,' ',e.layerY);
+		})
+
+		function draw(id) {
+			let iter = id / 10;
+			// console.log(iter);
+			refreshCanvas()
+			drawShips(iter)
+			window.requestAnimationFrame(draw);
+		}
 
 		function refreshCanvas() {
 			ctx.clearRect(0, 0, WIDTH, HEIGHT);
 			ctx.drawImage(canvasBackgroundImage, 1, 1, WIDTH, HEIGHT);
-		}
-
-		function draw(id) {
-			let iter = id / 10;
-			console.log(iter);
-			refreshCanvas()
-			drawShips(iter)
-			// ctx.drawImage(shipImage, 100, 50);
-			window.requestAnimationFrame(draw);
 		}
 
 		function drawShips(sec) {
@@ -70,13 +72,7 @@
 				if (ship.y < 0 - shipImage.height) {
 					ship.y = HEIGHT
 				}
-
-				// let shipY = sec
-				// // console.log(shipY);
-				// if (shipY >= HEIGHT)
-				// {
-				// 	shipY -= HEIGHT
-				// }
+				// ship.x = 
 				ctx.drawImage(shipImage, ship.x, ship.y);
 			});
 
