@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Lecture 11</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Cviceni 11 Geo Notification</h1>
+
+    <section id='location'>
+        <h2>Location</h2>
+        <div id='locationInfo'></div>
+        <button onclick="getLocation()">Notify me!</button>
+    </section>
+
+    <script type="text/javascript">
+
+        let locationEl = document.getElementById('locationInfo')
+
+        // getLocation()
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(notifyMe);
+            } else {
+                locationEl.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            locationEl.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+        }
+
+        function notifyMe(position) {
+            // Let's check if the browser supports notifications
+            console.log(Notification.permission);
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notification");
+            }
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission !== "denied") {
+                // If it's okay let's create a notification
+                var notification = new Notification(position);
+                console.log('sent');
+            }
+            showPosition(position)
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!Notification) {
+                alert('Desktop notifications not available in your browser.');
+                return;
+            }
+            if (Notification.permission !== 'granted')
+                Notification.requestPermission();
+        });
+    </script>
+</body>
+
+</html>

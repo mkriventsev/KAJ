@@ -22,4 +22,8 @@
 
 - [x] CVICENI 11- <https://mkriventsev.github.io/KAJ/CV11/zadani>
 
-- [ ] CVICENI 12
+- [x] CVICENI 12 (without grid-template-areas) - <https://mkriventsev.github.io/KAJ/CV12/zadani-grid>
+
+- [x] CVICENI 12 (with grid-template-areas) - <https://mkriventsev.github.io/KAJ/CV12/zadani-grid2>
+
+- [x] CVICENI 12 (GEO + NOTIFICATIONS) - <https://mkriventsev.github.io/KAJ/CV12/zadani-geo-not>

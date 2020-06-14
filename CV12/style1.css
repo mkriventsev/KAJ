@@ -1,0 +1,51 @@
+/* 1nd variant */
+/*
+        https://css-tricks.com/snippets/css/complete-guide-grid/#prop-grid-auto-columns-rows
+        https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout
+
+        + vyrobte layout
+            bez pomoci grid-template-areas
+
+            +--------------------------------------------------+
+            |                                                  |
+            |                     Header                       |
+            +--------------------------------------------------+
+            |       |                              |     |     |
+            |       |                              |     |     |
+            |   Nav |             Article          | as1 | as2 |
+            |       |                              |     |     |
+            |       |                              |     |     |
+            +--------------------------------------------------+
+            |                                                  |
+            |                      Footer                      |
+            |                                                  |
+            +---------------------------------------------------+
+    */
+
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 100px auto 40px;
+    grid-template-columns: 100px 1fr 10% 10%;
+    gap: 1em;
+}
+
+.box {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background-color: antiquewhite
+}
+
+header.box {
+    grid-column-start: 1;
+    grid-column-end: last-column;
+    background-color: salmon
+}
+
+footer.box {
+    grid-column-start: 1;
+    grid-column-end: last-column;
+    background-color: greenyellow;
+}
