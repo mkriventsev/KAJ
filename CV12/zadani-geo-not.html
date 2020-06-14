@@ -18,18 +18,15 @@
     <section id='location'>
         <h2>Location</h2>
         <div id='locationInfo'></div>
-        <button onclick="getLocation()">Notify me!</button>
     </section>
 
     <script type="text/javascript">
 
         let locationEl = document.getElementById('locationInfo')
 
-        // getLocation()
-
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(notifyMe);
+                navigator.geolocation.getCurrentPosition(showPosition);
             } else {
                 locationEl.innerHTML = "Geolocation is not supported by this browser.";
             }
@@ -37,21 +34,21 @@
 
         function showPosition(position) {
             locationEl.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+            notifyMe(position)
         }
 
         function notifyMe(position) {
             // Let's check if the browser supports notifications
-            console.log(Notification.permission);
-            if (!("Notification" in window)) {
-                alert("This browser does not support desktop notification");
-            }
-            // Let's check whether notification permissions have already been granted
-            else if (Notification.permission !== "denied") {
+            if (Notification.permission !== "denied") {
+                title = 'Your Position'
+                options = {
+                    body: "Latitude: " + position.coords.latitude + "\nLongitude: " + position.coords.longitude,
+                    dir: 'auto',
+                    icon: 'icon.jpg'
+                }
                 // If it's okay let's create a notification
-                var notification = new Notification(position);
-                console.log('sent');
+                let notification = new Notification(title, options);
             }
-            showPosition(position)
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -61,6 +58,7 @@
             }
             if (Notification.permission !== 'granted')
                 Notification.requestPermission();
+            getLocation()
         });
     </script>
 </body>
